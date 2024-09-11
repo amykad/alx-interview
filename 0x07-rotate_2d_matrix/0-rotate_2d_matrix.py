@@ -1,29 +1,31 @@
 #!/usr/bin/python3
-"""2D matrix rotation module.
-"""
+""" 2D rotation """
 
 
 def rotate_2d_matrix(matrix):
-    """Rotates an m by n 2D matrix in place.
+    """function that takes a matrix
+    and rotates it 90 degrees
+    clockwise
+    Instructions:
+        - Do not return anything.
+        - The matrix must be edited in-place.
+    Assumptions:
+        - matrix is a 2D array (n x n)
+        - matrix is not empty
     """
-    if type(matrix) != list:
-        return
-    if len(matrix) <= 0:
-        return
-    if not all(map(lambda x: type(x) == list, matrix)):
-        return
-    rows = len(matrix)
-    cols = len(matrix[0])
-    if not all(map(lambda x: len(x) == cols, matrix)):
-        return
-    c, r = 0, rows - 1
-    for i in range(cols * rows):
-        if i % rows == 0:
-            matrix.append([])
-        if r == -1:
-            r = rows - 1
-            c += 1
-        matrix[-1].append(matrix[r][c])
-        if c == cols - 1 and r >= -1:
-            matrix.pop(r)
-        r -= 1
+    n = len(matrix)
+    # We will iterate the matrix from the outermost layer moving inwards
+    # n // 2 is the number of times we will iterate the matrix based on its
+    # size
+    for row in range(n // 2):
+        # n - row - 1 is the last column
+        for column in range(row, n - row - 1):
+            curr_value = matrix[row][column]
+            # left -> top
+            matrix[row][column] = matrix[n - 1 - column][row]
+            # bottom -> left
+            matrix[n - 1 - column][row] = matrix[n - 1 - row][n - 1 - column]
+            # right -> bottom
+            matrix[n - 1 - row][n - 1 - column] = matrix[column][n - 1 - row]
+            # top -> right
+            matrix[column][n - 1 - row] = curr_value
